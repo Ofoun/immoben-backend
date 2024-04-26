@@ -16,4 +16,5 @@ FROM eclipse-temurin:17-jre-alpine
 #COPY --from=builder target/*.jar immoben-backend.jar
 #COPY --from=builder target/*.jar app.jar
 EXPOSE 8888
-CMD ["java","-jar","/immoben-backend.jar"]
+#CMD ["java","-jar","/immoben-backend.jar"]
+CMD ["java","-jar","app.jar"]
