@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+</head>
+
+<body>
+<div th:fragment="content" th:remove="tag">
+	<div class="form-group row m-1 col-sm-9" style="display: none;" >
+		<!-- input type="text" class="form-control" th:field="*{customerEmail}"></input -->
+		<output class="requester-email" sec:authentication="principal.email"></output>
+		<input class="form-control requester-email" type="text" th:field="*{ownerEmail}"></input>
+	</div>
+
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Nom de l'annonce <b style= "color: red">*</b>:</label>
+		<div class="col-sm-9">
+		  	<th:block th:if="${isReadOnlyForSalesperson}">		
+				<input type="text" class="form-control" th:field="*{name}"	readonly="readonly" />
+			</th:block>
+			
+			<th:block th:unless="${isReadOnlyForSalesperson}">						
+				<input type="text" class="form-control" th:field="*{name}" placeholder= "Obligatoire !!!" required minlength="3" maxlength="256"  />
+			</th:block>												
+		</div>
+	</div>
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Alias:</label>
+		<div class="col-sm-9">
+		  	<th:block th:if="${isReadOnlyForSalesperson}">
+					<input type="text" class="form-control" th:field="*{alias}"
+						placeholder="La valeur par défaut est le nom de l'annonce ( Pas Obligatoire !!!)"
+						readonly="readonly" />	
+		  	</th:block>
+		  				
+			<th:block th:unless="${isReadOnlyForSalesperson}">
+				<input type="text" class="form-control" th:field="*{alias}"
+					placeholder="La valeur par défaut est le nom de l'annonce ( Pas Obligatoire !!!)"
+					minlength="3" maxlength="256"  />
+			</th:block>				
+		</div>
+	</div>
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Ville <b style= "color: red">*</b>:</label>
+		<div class="col-sm-9">
+			<th:block th:unless="${isReadOnlyForSalesperson}">
+			<select th:field="*{city}" class="form-control" required>
+				<th:block th:each="city : ${listCities}">
+					<option th:value="${city.id}">[[${city.name}]]</option>
+				</th:block>
+			</select>
+			</th:block>
+			
+		  	<th:block th:if="${isReadOnlyForSalesperson}">
+				<input type="text" class="form-control" th:value="${product.city.name}" readonly />
+			</th:block>
+			
+		</div>
+	</div>
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Catégorie <b style= "color: red">*</b>:</label>
+		<div class="col-sm-9">
+			<th:block th:unless="${isReadOnlyForSalesperson}">
+			<th:block th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+				<th:block th:if="${product.category != null}">
+				<select th:field="*{category}" class="form-control" required>
+					<th:block th:each="cat : ${product.city.categories}">
+						<option th:value="${cat.id}">[[${cat.name}]]</option>
+					</th:block>
+				</select>			
+				</th:block>
+				
+				<th:block th:if="${product.category == null}">
+				<select th:field="*{category}" class="form-control" required>
+				</select>
+				</th:block>
+			</th:block>
+			
+		  	<th:block th:if="${isReadOnlyForSalesperson}">
+				<input type="text" class="form-control" th:value="${product.category.name}" readonly />		
+			</th:block>
+		</div>
+	</div>
+	
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Quartier <b style= "color: red">*</b>:</label>
+		<div class="col-sm-9">
+		  	<th:block th:if="${isReadOnlyForSalesperson}">		
+				<input type="text" class="form-control" th:field="*{district}"	readonly="readonly" />
+			</th:block>
+			
+			<th:block th:unless="${isReadOnlyForSalesperson}">						
+					<input type="text" class="form-control" th:field="*{district}"
+						placeholder= "Obligatoire !!!"
+						required minlength="3" maxlength="256"  />
+			</th:block>												
+		</div>
+	</div>
+
+	<div class= "form-group row m-1">
+		<label class= "col-sm-3 col-form-label">Salon:</label>
+		<div class= "col-sm-9">
+			<select name="lounge" class= "form-control" th:field= "*{lounge}">
+				<option value="" selected="selected">- - -</option>
+				<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		</div>
+	</div>
+	<div class= "form-group row m-1">
+		<label class= "col-sm-3 col-form-label">Chambre:</label>
+		<div class= "col-sm-9">
+			<select name="room" class= "form-control" th:field= "*{room}">
+				<option value="" selected="selected">- - -</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+			</select>
+		</div>
+	</div>
+	<div class= "form-group row m-1">
+		<label class= "col-sm-3 col-form-label">Cuisine:</label>
+		<div class= "col-sm-9">
+		    <select name="kitchen" class= "form-control" th:field= "*{kitchen}">
+				<option value="" selected="selected">- - -</option>
+				<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		</div>
+	</div>
+	<div class= "form-group row m-1">
+		<label class= "col-sm-3 col-form-label">Douche:</label>
+		<div class= "col-sm-9">
+			<select name="shower" class= "form-control" th:field= "*{shower}">
+				<option value="" selected="selected">- - -</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		</div>
+	</div>
+	<div class= "form-group row m-1">
+		<label class= "col-sm-3 col-form-label">Toilette:</label>
+		<div class= "col-sm-9">
+			<select name="toilet" class= "form-control" th:field= "*{toilet}">
+				<option value="" selected="selected">- - -</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class= "form-group row m-1">
+		<label class= "col-sm-3 col-form-label">Superficie (m<sup>2</sup>):</label>
+		<div class= "col-sm-9">
+			<input type="text" name="area" class= "form-control" th:field= "*{area}" onFocus="value=''"/>
+		</div>
+	</div>
+						
+<!-- 	<div class= "form-group row m-1">
+		<label class= "col-sm-3 col-form-label">Loyer ( FCFA ):</label>
+		<div class= "col-sm-9">
+			<input type= "text" class= "form-control" th:field= "*{price}" name="price" placeholder="- - -"/>
+		</div>
+	</div> -->
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Numéro de téléphone <b style= "color: red">*</b>:</label>
+		<div class="col-sm-9">
+		  	<th:block th:if="${isReadOnlyForSalesperson}">		
+				<input type="tel" class="form-control" th:field="*{phoneNumber}"	readonly="readonly"/>
+			</th:block>
+			
+			<th:block th:unless="${isReadOnlyForSalesperson}">						
+					<input type="tel" class="form-control" th:field="*{phoneNumber}"/>
+			</th:block>												
+		</div>
+	</div>
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Status:</label>
+		<div class="col-sm-9">
+		  	<th:block th:if="${isReadOnlyForSalesperson}">
+				<th:block th:if="${product.category != null}">		
+					<input type="checkbox" th:field="*{enabled}" disabled="disabled" />
+				</th:block>
+			</th:block>
+			
+			<th:block th:unless="${isReadOnlyForSalesperson}">	
+				<input type="checkbox" th:field="*{enabled}" />				
+			</th:block>
+		</div>
+	</div>
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Encore disponible:</label>
+		<div class="col-sm-9">
+		  	<th:block th:if="${isReadOnlyForSalesperson}">	
+				<input type="checkbox" th:field="*{inStock}" disabled="disabled" />
+			</th:block>
+			
+			<th:block th:unless="${isReadOnlyForSalesperson}">
+				<input type="checkbox" th:field="*{inStock}" />				
+			</th:block>
+		</div>
+	</div>
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Frais de démarchage:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" th:field="*{cost}" onFocus="value=''"/>
+		</div>
+	</div>
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Montant <b style= "color: red">*</b>:</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" th:field="*{price}" onFocus="value=''" />
+		</div>
+	</div>
+	
+	<div class="form-group row m-1">
+		<label class="col-sm-3 col-form-label">Pourcentage de remise :</label>
+		<div class="col-sm-9">
+			<input type="text" step="0.01" class="form-control" th:field="*{discountPercent}" onFocus="value=''"/>
+		</div>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<head >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<div class="modal-header">
+	<h4 class="modal-title">Détails du compte client</h4>
+	<button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+		
+<div>
+
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+	  <li class="nav-item">
+	    <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">Généralités</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false">Adresse</a>
+	  </li>
+	 </ul>
+	 
+	<div class="tab-content" id="myTabContent">
+	  <div class="tab-pane fade show active p-3" id="general" role="tabpanel" aria-labelledby="general-tab">
+		  <div class="form-group row">
+		    <label for="id" class="col-sm-4 col-form-label">Identifiant du client:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.id}" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="name" class="col-sm-4 col-form-label">Nom du client:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.fullName}" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="email" class="col-sm-4 col-form-label">E-mail:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.email}" />
+		    </div>
+		  </div>  
+		  
+		  <div class="form-group row">
+		    <label for="phone" class="col-sm-4 col-form-label">Téléphone:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.phoneNumber}" />
+		    </div>
+		  </div> 
+		  
+		  <div class="form-group row">
+		    <label for="enabled" class="col-sm-4 col-form-label">Status:</label>
+		    <div class="col-sm-8">
+		      <input type="checkbox" th:checked="${customer.enabled}" disabled="disabled" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="createdTime" class="col-sm-4 col-form-label">Heure de création du compte:</label>
+		    <div class="col-sm-8">
+		      <span th:text="${#dates.format(customer.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+		    </div>
+		  </div>		   		  
+	  </div>
+	  
+	  <div class="tab-pane fade show p-3" id="address" role="tabpanel" aria-labelledby="address-tab">
+		  <div class="form-group row">
+		    <label for="address1" class="col-sm-4 col-form-label">Adresse:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.addressLine1}" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="address2" class="col-sm-4 col-form-label">Nom de votre propriétaire:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.addressLine2}" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="country" class="col-sm-4 col-form-label">Pays:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.country.name}" />
+		    </div>
+		  </div> 
+		  
+		  <div class="form-group row">
+		    <label for="state" class="col-sm-4 col-form-label">Etat/Province:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.state}" />
+		    </div>
+		  </div> 
+		  
+		  <div class="form-group row">
+		    <label for="city" class="col-sm-4 col-form-label">Ville:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.city}" />
+		    </div>
+		  </div>   
+		  	  
+	  </div>	  
+	</div>    
+</div>
+	
+<div class="modal-footer">
+	<button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+</div>	

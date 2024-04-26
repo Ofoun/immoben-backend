@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+	<title>[[${title}]]</title>
+   	<link rel="icon" type="image/png" href="https://immoben.s3.eu-central-1.amazonaws.com/icon-logo/ImmobenIcon.jpg" />
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />		
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+	<script type="text/javascript" th:src="@{/js/common.js}" ></script>
+</head>
+
+<body>
+	
+	<th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+		<a class="text-white"
+			th:href="@{${moduleURL} + '/page/' 
+				+ ${currentPage} + '?sortField=' 
+				+ ${fieldName} +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} 
+				+ ${keyword != null ? '&keyword=' + keyword : ''} 
+				+ ${categoryId != null ? '&categoryId=' + categoryId : ''}
+				+ ${customerId != null ? '&customerId=' + customerId : ''}
+			}">
+			[[${columnLabel}]]
+		</a>	
+										
+		<span th:if="${sortField == fieldName}"
+			th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>					
+	</th>
+						
+	<a th:fragment="page_link(pageNum, label)"
+		class="page-link" 
+		th:href="@{${moduleURL} + '/page/' 
+			+ ${pageNum} + '?sortField=' + ${sortField} 
+			+ '&sortDir=' + ${sortDir} 
+			+ ${keyword != null ? '&keyword=' + keyword : ''} 
+			+ ${categoryId != null ? '&categoryId=' + categoryId : ''}
+		}">
+		[[${label}]]
+	</a>
+	
+	<div th:fragment="user_photos" th:remove="tag">
+		<span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
+		<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}"
+			class="img-fluid-frontEnd" />	
+	</div>
+	
+	<div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
+		<a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green" 
+			th:href="@{${entityURL} + '/enabled/false'}"
+			th:title="'Désactiver ' + ${entityName}"
+			></a>
+			
+		<a th:if="${enabled == false}" class="fas fa-circle fa-2x icon-dark" 
+			th:href="@{${entityURL} + '/enabled/true'}"
+			th:title="'Activer ' + ${entityName}"
+			></a>	
+	</div>
+	
+	<div th:fragment="edit(entityName, editURL)" th:remove="tag">
+		<a class="fas fa-edit fa-2x icon-green" th:href="@{${editURL}}"
+			th:title="'Modifier ' + ${entityName}"></a>
+	</div>
+	
+	<div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
+		<th:block th:if="${visible}">		
+		<a class="fas fa-trash-alt fa-2x icon-maroon link-delete" 
+			th:href="@{${deleteURL}}"
+			th:entityId="${entityId}"
+			th:title="'Supprimer this ' + ${entityName}"></a>
+		</th:block>	
+	</div>
+	
+	<div th:fragment="pagination(entityName)" th:remove="tag">
+		<div class="text-center m-1" th:if="${totalItems > 0}" style="padding-top:100px">
+			<span>Affichage [[${entityName}]] # [[${startCount}]] à [[${endCount}]] des [[${totalItems}]]</span>
+		</div>
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span>Aucun(e) [[${entityName}]] n'est trouvé(e)</span>
+		</div>
+		
+		<div th:if="${totalPages > 1}">
+			<nav>
+			  <ul class="pagination justify-content-center flex-wrap">
+			    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+			    	<a th:replace="fragments :: page_link(1, '<<')"></a>
+			    </li>		  
+			    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+			    	<a th:replace="fragments :: page_link(${currentPage - 1}, '<')"></a>
+			    </li>
+			    
+			    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}" 
+			    	th:each="i : ${#numbers.sequence(1, totalPages)}">
+			    	<a th:replace="fragments :: page_link(${i}, ${i})"></a>
+			    </li>
+			    
+			    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+			    	<a th:replace="fragments :: page_link(${currentPage + 1}, '>')"></a>
+			    </li>
+			    
+			    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+			    	<a th:replace="fragments :: page_link(${totalPages}, '>>')"></a>
+			    </li>		    
+			  </ul>
+			</nav>	
+		</div>		
+	</div>	
+	
+	
+	<div th:fragment="search_form_and_message()" class="searchTemplate ">
+		
+		<div th:if="${message != null}" class="alert alert-success text-center">
+			[[${message}]]
+		</div>
+	
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark ">
+		  <form th:action="@{${moduleURL} + '/page/1'}" class="form-inline text-white m-1">
+		  	<input type="hidden" name="sortField" th:value="${sortField}" />
+		  	<input type="hidden" name="sortDir" th:value="${sortDir}" />
+		  		Recherche: &nbsp;
+		    <input type="search" class="form-control mr-sm-1" name="keyword" th:value="${keyword}" 
+		    	placeholder="écrivez ici" required />
+		    <button type="submit" class="btn btn-success m-1" value="Chercher" >Chercher</button>
+
+		    <button type="button" class="btn btn-danger" value="Annuler" onclick="clearFilter()" >Annuler</button>
+
+		  </form>
+		</nav>
+	</div>
+	
+	
+	
+	<div th:fragment="format_currency(amount)" th:remove="tag">
+		<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+	</div>
+	
+	<div th:fragment="format_time(dateTime)" th:remove="tag">
+		<span th:text="${#dates.format(dateTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+	</div>
+	
+	<div th:fragment="currency_input(amount)" th:remove="tag">
+		<input type="text" readonly class="form-control" th:value="${(CURRENCY_SYMBOL_POSITION == 'Before price' ? CURRENCY_SYMBOL : '') + #numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) + (CURRENCY_SYMBOL_POSITION == 'After price' ? CURRENCY_SYMBOL : '')}">
+	</div>
+	
+	<div th:fragment="footer" class="footer text-center p-1">
+		<p>[[${COPYRIGHT}]]</p>
+		<p>Immoben Control Panel - Copyright &copy;2023 Immoben Ltd.</p>
+	</div>	
+				
+</body>
+</html>

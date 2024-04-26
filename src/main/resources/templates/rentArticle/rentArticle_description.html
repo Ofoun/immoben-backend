@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class= "form-group row m-1">
+			<label class= "col-sm-1 col-form-label">Message:</label>
+			<div class= "col-sm-11">
+				 <textarea id="message" th:field= "*{message}" name="message" class="form-control" rows="10" maxlength="3000"></textarea>
+			</div>
+		</div>
+					
+					
+<!-- 	<div class="m-2">
+		<label>Courte Description:</label>
+		<textarea class="form-control" th:field="*{shortDescription}" rows="5" required></textarea>
+	</div>
+	
+	<div class="m-2">
+		<label>Large Description:</label>
+		<textarea class="form-control" th:field="*{fullDescription}" rows="10" required></textarea>
+	</div>	
+	 --></div>		
+</body>
+</html>

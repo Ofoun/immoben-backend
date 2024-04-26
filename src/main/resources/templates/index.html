@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" id="html-index">
+	
+<head th:replace="fragments :: page_head('Home - Immoben Admin', 'none')"  >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body id="body-fluid">
+<div class="container-fluid" id="container-fluid-index">
+	<div th:replace="navigation :: menu"></div>
+	<div class= "top-index-message">
+		Bienvenue 
+		<a th:href="@{/account}" 
+			sec:authentication="Principal.fullName"></a>	
+		<span sec:authentication="Principal.authorities"> </span>
+			!!!	
+		<h2 class="mt-5 mb-5">Continuez en cliquant sur le lien suivant <a th:href="@{/products/new}">"Mettre une nouvelle annonce en ligne"</a></h2>
+	</div>
+
+	
+	<div th:replace="fragments :: footer"></div>
+	
+</div>
+</body>
+</html>

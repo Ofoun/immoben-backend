@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+		xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">	
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+	<title>Login - Immoben Admin</title>
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head> 
+
+<body>
+<div class="container-fluid text-center mt-5">
+
+	<div class="mb-5">
+		<img 
+			id="thumbnail"
+		 	th:src="@{/images/Immoben.png}"
+			class="img-fluid-header" 
+			alt="ImmobenLogo" 
+			style="border:  1px solid #646464; 
+			    border-radius: 4px;
+				padding: 3px;
+				width: 220px;
+				height: 70px;"			
+			/>
+	</div> 
+	
+	<form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto">
+		<div th:if="${param.error}">
+			<p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+		</div>
+		<div th:if="${param.logout}">
+			<p class="text-warning">Vous avez été déconnecté avec succès ! </p>
+		</div>
+		
+		<div class="border border-info rounded p-3 mb-5">
+			<p>Accès Immoben Admin Web </p>
+			<p>
+				<input type="email" name="email" class="form-control" placeholder="E-mail" required/>
+			</p>
+			<p>
+				<input type="password" name="password" class="form-control" placeholder="Password" required/>
+			</p>
+			<p>
+				<input type="checkbox" name="remember-me" />&nbsp;&nbsp;Souviens-moi
+			</p>
+			<p>
+				<input type="submit" value="Connectez-vous" class="btn btn-primary" />
+			</p>				
+		</div>
+	</form>
+	
+	<div class="footer text-center m-3" >
+		<p>Immoben Control Panel - Copyright &copy; Immoben</p>
+	</div>
+	
+</div>
+</body>
+</html>

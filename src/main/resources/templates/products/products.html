@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	
+<head th:replace="fragments :: page_head('Produits - Immoben Admin', 'none')" >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+<div class="container-fluid">
+
+	<div th:replace="navigation :: menu"></div>
+	
+	<h2>Gestion des annonces</h2>
+	
+	<div>
+		<h4>
+			<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Assistant')">
+				<a th:href="@{/products/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+				<a th:href="@{/products/new}"> Mettre une nouvelle annonce en ligne</a>
+			</th:block>
+		</h4>
+	</div>
+		
+	<div th:replace="fragments :: search_form_and_message" ></div>
+	
+			
+	<div class="full-details mb-5">
+		<table class="table table-bordered table-striped table-hover table-responsive-xxl">
+			<thead class="thead-dark">
+				<tr>
+					<th class="col-1 hideable-column" > 
+						<th th:replace="fragments :: column_link('id', 'ID', 'tag')" />
+					</th>
+					
+					<th>Image</th>
+					
+					<th class="col-1 hideable-column" > 
+						<th th:replace="fragments :: column_link('createdTime', 'Date(création)', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column" > 
+						<th th:replace="fragments :: column_link('updatedTime', 'Date(modif)', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column" > 
+						<th th:replace="fragments :: column_link('city', 'Ville', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('category', 'Catégorie', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('district', 'Quartier', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('lounge', 'Salon', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('room', 'Chambre', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('kitchen', 'Cuisine', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('shower', 'Douche', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('toilet', 'Toilette', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('area', 'Superficie', 'tag')" />
+					</th>
+					
+					<th class="col-1 hideable-column"> 
+						<th th:replace="fragments :: column_link('price', 'Montant', 'tag')" />
+					</th>
+					
+					<th style="min-width: 105px;">Téléphone</th>
+					<th style="max-width: 100px;">Propriétaire</th>
+					<th></th>
+				</tr>								
+			</thead>
+			
+			<tbody>
+				<!-- <tr th:each="product : ${listProducts}" th:with="customer=${product.customer}"> -->
+				<tr th:each="product : ${listProducts}">
+					<td class="col-1">[[${product.id}]]</td>
+					<td class="col-1">
+						<img th:src="@{${product.mainImagePath}}" class="img-fluid-frontEnd-small"/>
+					</td>
+					<td class="col-1">[[${product.createdTime}]]</td>
+					<td class="col-1" th:text="${#dates.format(product.updatedTime, 'dd-MMM-yyyy  à  HH:mm:ss')}"></td>
+					<td class="col-1">[[${product.city}]]</td>
+					<td class="col-1">[[${product.category}]]</td>
+					<td class="col-1">[[${product.shortDistrict}]]</td>
+					<td class="col-1">[[${product.lounge}]]</td>
+					<td class="col-1">[[${product.room}]]</td>
+					<td class="col-1">[[${product.kitchen}]]</td>
+					<td class="col-1">[[${product.shower}]]</td>
+					<td class="col-1">[[${product.toilet}]]</td>
+					<td class="col-1">[[${product.area}]]</td>
+					<td class="col-1">[[${product.price}]]</td>
+					<td class="col-1">[[${product.phoneNumber}]]</td>
+                    <td class="col-1">[[${product.customer}]]</td>
+                                      
+<!-- 					<td class="col-1" th:field= "*{customer}" th:href="@{/account}" id="customer"
+					sec:authentication="principal.fullName" value="principal.fullName"></td>
+ -->										
+					<td class="col-1 text-center p-2" style="white-space: nowrap">						
+						<a class="fas fa-file-alt fa-2x icon-blue link-detail"
+							th:href="@{'/products/detail/' + ${product.id}}"
+							title="Voir les détails de l'annonce"
+							></a>
+						&nbsp;
+						<th:block sec:authorize="hasAnyAuthority('Admin')">
+							<div th:replace="fragments :: status(${product.enabled}, 'product', '/products/' + ${product.id})" ></div>
+							&nbsp;
+							<div th:replace="fragments :: edit('product', '/products/edit/' + ${product.id})" ></div>
+							&nbsp; 
+							<div th:replace="fragments :: delete('product', ${product.id}, '/products/delete/' + ${product.id}, true)" ></div>
+						</th:block>							
+					</td>									
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	
+	
+        
+    
+    <div class="less-details mb-5">
+        <div th:each="product : ${listProducts}">
+	        <div class="table table-bordered table-striped table-hover table-responsive-xxl">
+		         <small>
+			         <div class="row" >
+			         
+		               <div class="col-4 ml-1">
+		                   <div class="row-1"><b>ID: </b>[[${product.id}]]</div>
+		                   <div class="row-1 mb-1"><b>[[${product.shortName}]]</b></div>
+		                   <div class="row-1 mb-2"><img th:src="@{${product.mainImagePath}}" class="img-fluid-mobile"/></div>
+		                   <div class="row-1"><b>Téléphone: </b></div>
+		                   <small class="row-1">[[${product.phoneNumber}]]</small>	
+		               </div>
+		               
+		               <div class="col-6">
+		                   <div class="row"><b>Ville:</b>&nbsp; [[${product.city}]]</div>
+		                   <div class="row"><b>Catégorie:</b>&nbsp; [[${product.category}]]</div>
+		                   <div class="row"><b>Quartier:</b>&nbsp; [[${product.shortDistrict}]]</div>
+		                   <div class="row"><b>Salon:</b>&nbsp; [[${product.lounge}]]</div>
+		                   <div class="row"><b>Chambre:</b>&nbsp; [[${product.room}]]</div>
+		                   <div class="row"><b>Cuisine:</b>&nbsp; [[${product.kitchen}]]</div>
+		                   <div class="row"><b>Douche:</b>&nbsp; [[${product.shower}]]</div>
+		                   <div class="row"><b>Toilette:</b>&nbsp; [[${product.toilet}]]</div>
+	                       <div class="row"><b>Superficie:</b>&nbsp; [[${product.area}]]</div>
+	                       <div class="row"><b>Montant:</b>&nbsp; [[${product.price}]]</div>      
+		               </div>                
+		                                 
+	                   <div class="col-1 text-center p-2"> 
+	                   
+	                        <div class="pb-4">
+			                    <div>                     
+			                       <a class="fas fa-file-alt fa-2x icon-blue link-detail"
+			                           th:href="@{'/products/detail/' + ${product.id}}"
+			                           title="Voir les détails de l'annonce"
+			                           ></a> 
+			                    </div>
+	                       </div>
+                        <th:block sec:authorize="hasAnyAuthority('Admin')">
+	                       
+		                   <div class="pb-4">
+		                        <div sec:authorize="hasAnyAuthority('Admin')" th:replace="fragments :: status(${product.enabled}, 'product', '/products/' + ${product.id})" ></div>
+		                   </div>
+		                   
+		                   <div class="pb-4">
+		                        <div sec:authorize="hasAnyAuthority('Admin')" th:replace="fragments :: edit('product', '/products/edit/' + ${product.id})" ></div>
+		                   </div>
+		                   
+		                   <div>
+		                        <div sec:authorize="hasAnyAuthority('Admin')" th:replace="fragments :: delete('product', ${product.id}, '/products/delete/' + ${product.id}, true)" ></div>
+		                   </div>
+	                   </th:block>                       
+	                   </div>
+	                  
+	                </div>   
+	            </small> 
+	        </div>
+	     </div>   
+    </div>
+	
+	
+	
+		
+	<div th:replace="modal_fragments :: confirm_modal" ></div>
+	
+	<div class="modal fade" id="detailModal">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+			</div>
+		</div>
+	</div>
+	<div class="top_pagination"></div>
+	<div th:replace="fragments :: pagination('products')"></div>					
+	
+	<div th:replace="modal_fragments :: confirm_modal"  ></div>
+	
+	<div th:replace="fragments :: footer"></div>
+	
+</div>
+<script th:src="@{/js/common_list.js}"></script>   
+<script type="text/javascript">
+	moduleURL = "[[@{/products}]]";
+
+	$(document).ready(function() {
+		$(".link-delete").on("click", function(e) {
+			e.preventDefault();
+			showDeleteConfirmModal($(this), 'product');
+		});
+		
+		$(".link-detail").on("click", function(e) {
+			e.preventDefault();
+			linkDetailURL = $(this).attr("href");
+			$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+		});
+		
+/*  		$("#dropdownCategory").on("change", function() {
+			$("#searchForm").submit();
+		});
+		
+		$("#dropdownCity").on("change", function() {
+			$("#searchForm").submit();
+		});  */ 
+	});
+</script>
+</body>
+</html>

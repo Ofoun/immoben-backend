@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head >
+	<meta charset="UTF-8">
+</head>
+
+<body>
+<div th:fragment="content" th:remove="tag">
+	<form th:action="@{/settings/save_general}" method="post" enctype="multipart/form-data">
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Nom du site:</label>
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="SITE_NAME" 
+				th:value="${SITE_NAME}" required  />
+		</div>
+	</div>	
+	
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Droits d'auteur:</label>
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="COPYRIGHT" 
+				th:value="${COPYRIGHT}" required  />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Logo du site:</label>
+		<div class="col-sm-8">
+			<img 
+				id="thumbnail" 
+				alt="Site Logo thumbnail" th:src="@{${S3_BASE_URI + SITE_LOGO}}"
+				class="img-fluid-header"
+				style=" border: 1px solid #646464;
+					border-radius: 4px;
+					padding: 3px;
+					width: 150px;
+					height: 40px;"
+					  />
+			<input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg" />
+			
+		</div>
+	</div>	
+
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Type de devise:</label>
+		<div class="col-sm-8">
+			<select name="CURRENCY_ID" class="form-control">
+			<th:block th:each="currency : ${listCurrencies}">
+				<option th:value="${currency.id}" 
+					th:selected="(${currency.id} == ${CURRENCY_ID})">[[${currency}]]</option>
+			</th:block>
+			</select>			
+		</div>
+	</div>	
+			
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Position du symbole monétaire:</label>
+		<div class="col-sm-8">
+			<select name="CURRENCY_SYMBOL_POSITION" class="form-control">
+				<option value="Before price" th:selected="(${CURRENCY_SYMBOL_POSITION} == 'Before price')">Before price</option>
+				<option value="After price" th:selected="(${CURRENCY_SYMBOL_POSITION} == 'After price')">After price</option>
+			</select>			
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Type de point en décimal:</label>
+		<div class="col-sm-8">
+			<select name="DECIMAL_POINT_TYPE" class="form-control">
+				<option value="POINT" th:selected="(${DECIMAL_POINT_TYPE} == 'POINT')">Point (.)</option>
+				<option value="COMMA" th:selected="(${DECIMAL_POINT_TYPE} == 'COMMA')">Comma (,)</option>
+			</select>			
+		</div>
+	</div>
+		
+	<div class="form-group row ">
+		<label class="col-sm-4 col-form-label">Type de point en milliers :</label>
+		<div class="col-sm-8">
+			<select name="THOUSANDS_POINT_TYPE" class="form-control">
+				<option value="POINT" th:selected="(${THOUSANDS_POINT_TYPE} == 'POINT')">Point ( . )</option>
+				<option value="COMMA" th:selected="(${THOUSANDS_POINT_TYPE} == 'COMMA')">Virgule ( , )</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Chiffres décimaux :</label>
+		<div class="col-sm-8">
+			<select name="DECIMAL_DIGITS" class="form-control">
+				<option value="0" th:selected="(${DECIMAL_DIGITS} == 0)">0</option>
+				<option value="1" th:selected="(${DECIMAL_DIGITS} == 1)">1</option>
+				<option value="2" th:selected="(${DECIMAL_DIGITS} == 2)">2</option>
+				<option value="3" th:selected="(${DECIMAL_DIGITS} == 3)">3</option>
+				<option value="4" th:selected="(${DECIMAL_DIGITS} == 4)">4</option>
+			</select>			
+		</div>
+	</div>
+			
+			
+	<div class= "text-right m-5">
+		<input type="submit" value="Sauvegarder" class="btn btn-primary m-3" data-target="#modalDialog"/>
+		<input type="button" value="&nbsp;&nbsp;  Annuler  &nbsp;&nbsp;" class="btn btn-danger m-3" id="buttonCancel"/>
+	</div>
+<!-- 						
+	<div class="text-center">
+		<input type="submit" value="Save" class="btn btn-primary m-3" />
+	</div>	 -->
+	</form>
+	
+</div>
+
+
+<script type="text/javascript">
+MAX_FILE_SIZE = 5102400000000;              // 100KB
+moduleURL = "[[@{/products}]]";
+
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+
+
+
+</body>
+</html>

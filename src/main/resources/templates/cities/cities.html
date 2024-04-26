@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments :: page_head('Marque - Immoben Admin', 'none')" >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script type="text/javascript"src="jquery.js"></script>
+
+</head>
+
+
+<body>
+<div class="container-fluid" >
+	
+	<div th:replace="navigation :: menu"></div>
+	
+	<h2>Gestion de la liste des villes</h2>
+	
+	<div>
+		<h4>	
+			<a th:href="@{/cities/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>		
+			<a th:href="@{/cities/new}">Insérer une nouvelle ville</a>
+		</h4>	
+	</div>
+
+
+	<div th:replace="fragments :: search_form_and_message" ></div>
+		
+		
+	
+	<div class="full-details mb-5">
+		<table class="table table-bordered table-striped table-hover table-responsive-xl">
+			<thead class="thead-dark">
+				<tr>
+					<th class="col-1 hideable-column" style="min-width: 70px;"> 
+						<th th:replace="fragments :: column_link('id', 'ID', 'tag')" />
+					</th>
+					<th th:replace="fragments :: column_link('name', 'Ville', 'none')" />
+					<th>Categories</th>
+					<th></th>
+				</tr>								
+			</thead>
+			
+			<tbody>
+				<tr th:each="city : ${listCities}">
+					<td class="col-1">[[${city.id}]]</td>
+					<td class="col-3">[[${city.name}]]</td>
+					<td class="col-6">
+						<th:block th:each="cat : ${city.categories}">
+						<span class="badge badge-secondary" th:text="${cat.name}"></span>
+						</th:block>
+					</td>
+
+					<td class="col-2 text-center p-2" style="white-space: nowrap" sec:authorize="hasAnyAuthority('Admin')">
+						<div th:replace="fragments :: edit('city', '/cities/edit/' + ${city.id})" ></div>
+						&nbsp; 
+						<div th:replace="fragments :: delete('city', ${city.id}, '/cities/delete/' + ${city.id}, true)" ></div>						
+					</td>					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	
+	 
+	
+	                 
+    <div class="less-details mb-5">
+        <div th:each="city : ${listCities}" class="row m-1 table-bordered">
+	        <div class="row">
+	        
+	            <div class="col-9 m-1">
+                    <div class="row-6"><b>ID: </b>[[${city.id}]]</div>
+	                <div class="row-6"><b>Ville: </b>[[${city.name}]]</div>
+	                <div>
+	                    <th:block th:each="cat : ${city.categories}">
+	                        <span class="badge badge-secondary" th:text="${cat.name}"></span>
+	                    </th:block>
+	                </div>
+	            </div>
+	            
+	            <div class="col-2 m-1" sec:authorize="hasAnyAuthority('Admin')">
+	                <div  class="row-7 p-3">
+	                    <div th:replace="fragments :: edit('city', '/cities/edit/' + ${city.id})" ></div>
+	                    &nbsp; &nbsp; 
+	                    <div th:replace="fragments :: delete('city', ${city.id}, '/cities/delete/' + ${city.id}, true)" ></div>
+	                </div>
+	            </div>
+	        </div>
+        </div>  
+    </div>
+	
+	<div class="top_pagination"></div>
+	
+	<div th:replace="fragments :: pagination('villes')"></div>
+	
+	<div th:replace="modal_fragments :: confirm_modal"  ></div>
+	
+	<div th:replace="fragments :: footer"></div>
+	
+</div>
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+	moduleURL = "[[@{/cities}]]";
+
+	$(document).ready(function() {
+		$(".link-delete").on("click", function(e) {
+			e.preventDefault();
+			showDeleteConfirmModal($(this), 'city');
+		});
+	});
+</script>
+</body>
+</html>
+
+
+
+

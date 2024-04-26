@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    
+<head th:replace="fragments :: page_head('Home - Immoben Admin', 'none')"  >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+</head>
+
+<body>
+<div th:fragment="content" th:remove="tag">
+	<form th:action="@{/settings/save_mail_server}" method="post">
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">SMTP Serveur Host Name:</label>
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="MAIL_HOST" 
+				th:value="${MAIL_HOST}" required  />
+		</div>
+	</div>	
+	
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Numéro du Port:</label>
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="MAIL_PORT" 
+				th:value="${MAIL_PORT}" required  />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Nom d'utilisateur:</label>
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="MAIL_USERNAME" 
+				th:value="${MAIL_USERNAME}" required  />
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Mot de passe:</label>
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="MAIL_PASSWORD" 
+				th:value="${MAIL_PASSWORD}" required  />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Authentification du serveur requise:</label>
+		<div class="col-sm-8">
+			<select name="SMTP_AUTH" class="form-control">
+				<option value="true" th:selected="(${SMTP_AUTH} == 'true')">True</option>
+				<option value="false" th:selected="(${SMTP_AUTH} == 'false')">False</option>
+			</select>			
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Connexion sécurisée requise par le serveur (TLS):</label>
+		<div class="col-sm-8">
+			<select name="SMTP_SECURED" class="form-control">
+				<option value="true" th:selected="(${SMTP_SECURED} == 'true')">True</option>
+				<option value="false" th:selected="(${SMTP_SECURED} == 'false')">False</option>
+			</select>			
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">E-mail de l'expéditeur:</label>
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="MAIL_FROM" 
+				th:value="${MAIL_FROM}" required  />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<label class="col-sm-4 col-form-label">Nom de l'expéditeur:</label>
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="MAIL_SENDER_NAME" 
+				th:value="${MAIL_SENDER_NAME}" required  />
+		</div>
+	</div>
+			
+			
+	<div class= "text-right m-5">
+		<input type="submit" value="Sauvegarder" class="btn btn-primary m-3" data-target="#modalDialog"/>
+		<input type="button" value="&nbsp;&nbsp;  Annuler  &nbsp;&nbsp;" class="btn btn-danger m-3" id="buttonCancel1"/>
+	</div>
+								
+<!-- 	<div class="text-center">
+		<input type="submit" value="Save" class="btn btn-primary m-3" />
+	</div>	 -->
+	</form>
+</div>
+
+
+<script type="text/javascript">
+MAX_FILE_SIZE = 102400000000;              // 100KB
+moduleURL = "[[@{/products}]]";
+
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	
+<head th:replace="fragments :: page_head('Erreur - Immoben Admin', 'none')">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+
+<body>
+<div class="container-fluid">
+	<div th:replace="navigation :: menu"></div>
+	<div class="m-3">
+		<h2>Désolé, le serveur a rencontré une erreur lors du traitement de votre demande</h2>		
+	</div>
+
+	<div th:replace="fragments :: footer"></div>
+	
+</div>
+</body>
+</html>

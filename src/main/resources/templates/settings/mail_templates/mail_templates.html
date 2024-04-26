@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    
+<head th:replace="fragments :: page_head('Home - Immoben Admin', 'none')"  >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+</head>
+
+<body>
+<div th:fragment="content" th:remove="tag">
+<form th:action="@{/settings/save_mail_templates}" method="post">
+	<div>
+		<ul class="nav nav-tabs" id="mailTemplatesTab" role="tablist">
+		  <li class="nav-item">
+		    <a class="nav-link active" data-toggle="tab" href="#customerVerification" role="tab">Vérification du client</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" data-toggle="tab" href="#orderConfirmation" role="tab">Confirmation de commande</a>
+		  </li>	  
+		</ul>
+		
+		<div class="tab-content">
+		  <div class="tab-pane active p-3" id="customerVerification" role="tabpanel">
+		  	<div th:replace="settings/mail_templates/customer_verification:: content"></div>
+		  </div>
+		  <div class="tab-pane p-3" id="orderConfirmation" role="tabpanel">
+			<div th:replace="settings/mail_templates/order_confirmation:: content"></div>
+		  </div>	  	
+		 </div>
+	</div>
+			
+			
+	<div class= "text-right m-5">
+		<input type="submit" value="Sauvegarder" class="btn btn-primary m-3" data-target="#modalDialog"/>
+		<input type="button" value="&nbsp;&nbsp;  Annuler  &nbsp;&nbsp;" class="btn btn-danger m-3" id="buttonCancel2"/>
+	</div>
+	
+<!-- 	<div class="text-center">
+		<input type="submit" value="Save" class="btn btn-primary m-3" />
+	</div> -->	
+</form>	
+</div>
+
+
+<script type="text/javascript">
+MAX_FILE_SIZE = 5102400000;              // 100KB
+moduleURL = "[[@{/products}]]";
+
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+</body>
+</html>

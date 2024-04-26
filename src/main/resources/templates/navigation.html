@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+		
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />	
+</head>		
+
+<body>
+<div th:fragment="menu">
+	<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+		<input type="submit" />
+	</form>
+	<!-- <nav class="navbar navbar-expand-lg bg-dark navbar-dark"> -->
+	<nav class="navbar navbar-expand-lg navbar-light">
+		<a class="navbar-city" th:href="@{/}">
+			<img 
+			    src="https://immoben.s3.eu-central-1.amazonaws.com/site-logo/immoben.png"
+				class="img-fluid-header" 
+				alt="ImmobenLogo" 
+				style=" border:  1px solid #646464; 
+			    border-radius: 4px;
+				padding: 3px;
+				width: 220px;
+				height: 70px;	
+				margin: 0 4px;"		
+			/>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" id= "button-top-navbar">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		
+		<div class="collapse navbar-collapse" id="topNavbar">
+			<ul class="navbar-nav">
+				
+				
+				
+				<th:block sec:authorize="hasAuthority('Admin')">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown"
+							th:href="@{/users}">Utilisateurs</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" th:href="@{/users/new}">Créer un nouvel utilisateur</a>
+							<a class="dropdown-item" th:href="@{/users}">Tous les utilisateurs</a>
+						</div>
+					</li>						
+				</th:block>
+				
+				<th:block sec:authorize="hasAnyAuthority('Admin')">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown"
+							th:href="@{/categories}">Catégorie</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" th:href="@{/categories/new}">Créer une nouvelle catégorie</a>
+							<a class="dropdown-item" th:href="@{/categories}">Toutes les catégories</a>
+						</div>						
+					</li>		
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown"
+							 th:href="@{/cities}">Ville</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" th:href="@{/cities/new}">Insérer une nouvelle ville</a>
+							<a class="dropdown-item" th:href="@{/cities}">Toutes les villes</a>
+						</div>						 
+					</li>
+				</th:block>
+				
+				<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Shipper', 'Assistant')"><li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown"
+							th:href="@{/products}">Annonce</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" th:href="@{/products/new}">Faire une nouvelle annonce</a>
+							<a class="dropdown-item" th:href="@{/products}">Toutes les annonces</a>
+						</div>						
+					</li>
+				</th:block>
+				
+				<!-- <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Shipper', 'Assistant', 'Editor')"> -->
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown"
+							th:href="@{/products/new}">Faire une nouvelle annonce</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" th:href="@{/products/new}">Faire une nouvelle annonce</a>
+						</div> 						
+					</li>	
+					&nbsp;&nbsp;
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{http://immoben.fr}">Retour à la page d'accueil</a>
+					</li>	
+					&nbsp;&nbsp;
+				<!-- </th:block> -->
+				
+				<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'shipper')">
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/customers}">Client</a>
+					</li>		
+					
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/shipping_rates}">Frais d'envoi</a>
+					</li>
+				
+				
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/orders}">Commandes</a>
+					</li>
+				
+<!-- 				
+				
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/report}">Sales Report</a>
+					</li>	
+			
+				
+				
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/articles}">Articles</a>
+					</li>
+					
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/menus}">Menus</a>
+					</li>
+					 -->
+				</th:block>
+				
+				
+					
+<!-- 					<li class="nav-item dropdown"> 
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown"
+							th:href="@{/rentArticle}">&nbsp;&nbsp; Location &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" th:href="@{/rentArticle/new}">Faire une annonce de location</a>
+						</div> 					
+					</li>
+				 -->
+				<li class="nav-item dropdown" sec:authorize="hasAuthority('Admin')">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" 
+						th:href="@{/settings}">Paramètres</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" th:href="@{/settings#general}">Généralités</a>
+						<a class="dropdown-item" th:href="@{/settings#countries}">Pays</a>
+						<a class="dropdown-item" th:href="@{/settings#states}">Villes</a>
+						<a class="dropdown-item" th:href="@{/settings#mailServer}">Serveur de courrier</a>
+						<a class="dropdown-item" th:href="@{/settings#mailTemplate}">Modèles de courrier</a>
+						<a class="dropdown-item" th:href="@{/settings#payment}">Paiements</a>
+					</div>
+				</li>
+						
+				<li>
+					<span class="fas fa-user fa-2x icon-silver"></span>
+				</li>
+				
+				<li class="nav-item dropdown">
+				
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" 
+						th:href="@{/account}" 
+						sec:authentication="principal.fullName"></a>
+						
+					<div class="dropdown-menu">
+						<a class="dropdown-item" id="logoutLink" ><i>Déconnexion</i></a>
+					</div>
+				</li>									
+			</ul>
+		</div>
+				
+	</nav>
+	
+</div>
+</body>
+</html>

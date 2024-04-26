@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Commandes - Immoben Admin', 'none')" >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+<div class="container-fluid">
+	<div th:replace="navigation :: menu"></div>
+	<div class="mt-3">
+		<h2>Gestion des commandes</h2>	
+	</div>
+		
+	<div th:replace="fragments :: search_form_and_message" ></div>
+	
+	<div class="full-details mb-5">
+		<table class="table table-bordered table-striped table-hover table-responsive-xl">
+			<thead class="thead-dark">
+				<tr>
+					<th th:replace="fragments :: column_link('id', 'ID', 'none')" />
+					<th th:replace="fragments :: column_link('customer', 'Client', 'none')" />
+					<th th:replace="fragments :: column_link('total', 'Total', 'none')" />
+					<th th:replace="fragments :: column_link('orderTime', 'Date de commande', 'none')" />
+					<th th:replace="fragments :: column_link('destination', 'Destination du colis', 'none')" />					
+					<th th:replace="fragments :: column_link('paymentMethod', 'Methode de payement', 'none')" />		
+					<th th:replace="fragments :: column_link('status', 'Status', 'none')" />
+					
+					
+					<th></th>
+				</tr>								
+			</thead>
+			<tbody>
+				<tr th:each="order : ${listOrders}">
+					<td class="col-1" style="min-width: 70px;">[[${order.id}]]</td> 
+					<td class="col-2">
+						<a class="linkCustomerDetail" th:href="@{'/customers/detail/' + ${order.customer.id}}">
+						[[${order.customer.fullName}]]
+						</a>
+					</td>
+					<td class="col-1 text-center">
+						<div th:replace="fragments :: format_currency(${order.total})"></div>
+					</td>
+					<td class="col-2 text-center">
+						<div th:replace="fragments :: format_time(${order.orderTime})"></div>
+					</td>
+					<td class="col-3">[[${order.destination}]]</td>
+					<td class="col-1">[[${order.paymentMethod}]]</td>
+					<td class="col-1">[[${order.status}]]</td>
+
+					<td class="col-1 text-center p-2" style="white-space: nowrap">
+						<a class="fas fa-file-alt fa-2x icon-blue linkOrderDetail"
+							th:href="@{'/orders/detail/' + ${order.id}}"
+							title="Voir les détails de la commande"
+							></a>					
+						&nbsp; 
+						<div th:replace="fragments :: edit('cette commande', '/orders/edit/' + ${order.id})" ></div>
+						&nbsp; 
+						<div th:replace="fragments :: delete('cette commande', ${order.id}, '/orders/delete/' + ${order.id}, true)" ></div>					
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	
+	
+	<div class="less-details mb-5">
+		<div th:each="order : ${listOrders}" class="row m-1 mt-2 table-bordered rounded table-striped table-hover table-responsive-xl" >
+			
+			<div class="col-sm-9 p-2">
+					
+				<div>
+					<b>ID: </b>
+					[[${order.id}]] 
+				</div>
+				
+				<div>
+					<b>Client: </b>	
+					<a class="linkCustomerDetail" th:href="@{'/customers/detail/' + ${order.customer.id}}">
+					[[${order.customer.fullName}]]
+					</a>
+				</div>
+				
+				<div>
+					<b>Total: </b>
+					<div th:replace="fragments :: format_currency(${order.total})"> - [[${order.paymentMethod}]]</div>
+				</div>
+				
+				<div>
+					<b>Date: </b>
+					<div th:replace="fragments :: format_time(${order.orderTime})"> - [[${order.orderTime}]]</div>
+				</div>
+				
+				<div>
+					<b>Destination: </b>
+					[[${order.destination}]]
+				</div>
+				
+				<div>
+					<b>Payement: </b>
+					[[${order.paymentMethod}]]
+				</div>
+				
+				<div>
+					<b>Statut: </b>
+					[[${order.status}]]
+				</div>
+					
+			</div>
+
+			<div class="col-sm-2 m-1 p-2 text-center">
+				<a class="fas fa-file-alt fa-2x icon-blue linkOrderDetail"
+					th:href="@{'/orders/detail/' + ${order.id}}"
+					title="Voir les détails de la commande"
+					></a>					
+				&nbsp; 
+				<div th:replace="fragments :: edit('cette commande', '/orders/edit/' + ${order.id})" ></div>
+				&nbsp; 
+				<div th:replace="fragments :: delete('cette commande', ${order.id}, '/orders/delete/' + ${order.id}, true)" ></div>					
+			</div>
+		</div>
+		<div>&nbsp;</div>
+	</div>	
+
+	
+	
+	
+	<div class="top_pagination"></div>
+	
+	<div th:replace="fragments :: pagination('des commandes')"></div>
+	
+	<div th:replace="modal_fragments :: confirm_modal" ></div>
+	
+	<div class="modal fade" id="customerDetailModal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="orderDetailModal">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+			</div>
+		</div>
+	</div>	
+	
+	<div th:replace="fragments :: footer"></div>
+	
+</div>
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+	moduleURL = "[[@{/orders}]]";
+
+	$(document).ready(function() {
+		handleLinkViewCustomerDetails();
+		handleLinkViewOrderDetails();
+		handleLinkDeleteOrder();		
+	});
+	
+	function handleLinkDeleteOrder() {
+		$(".link-delete").on("click", function(e) {
+			e.preventDefault();
+			showDeleteConfirmModal($(this), 'order');
+		});		
+	}
+	
+	function handleLinkViewCustomerDetails() {
+		$(".linkCustomerDetail").on("click", function(e) {
+			e.preventDefault();
+			linkDetailURL = $(this).attr("href");
+			$("#customerDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+		});			
+	}
+	
+	function handleLinkViewOrderDetails() {
+		$(".linkOrderDetail").on("click", function(e) {
+			e.preventDefault();
+			linkDetailURL = $(this).attr("href");
+			$("#orderDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+		});		
+	}
+</script>
+</body>
+</html>

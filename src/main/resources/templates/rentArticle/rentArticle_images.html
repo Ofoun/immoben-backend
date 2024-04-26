@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+	
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="row" id="divRentArticleImages">
+			<div class="col border m-3 p-2">
+				<div><label>Principale Image: [[${rentArticle.mainImage}]]</label></div>
+				<div class="m-2">
+					<img id="thumbnail" alt="Apercu de l'image principale" class="img-fluid-mobile-grosse"
+						th:src="@{${rentArticle.mainImagePath}}"/>
+				</div>
+				<div>
+					<input type="file" id="fileImage" name="fileImage"
+						th:required="${rentArticle.mainImage == null}"
+						accept="image/png, image/jpeg, image/jfif" />
+				</div>
+				<input type="hidden" th:field="*{mainImage}" />
+			</div>			
+			
+		
+			<th:block th:each="rentArticleImage, status : ${rentArticle.images}">
+				<div class="col border m-3 p-2" th:id="'divExtraImage' + ${status.index}">
+					<div>
+						<label>Extra Image #[[${status.index + 1}]]: [[${rentArticleImage.name}]]</label>
+						<a name="linkRemoveExtraImage" 
+							class="btn fas fa-times-circle fa-2x icon-red float-right"
+							title="Supprimer cette image"></a>				
+					</div>
+					<div class="m-2">
+						<img th:id="'extraThumbnail' + ${status.index}" 
+							th:alt="'Extra image #' + ${status.index + 1} + ' preview'" class="img-fluid-mobile-grosse"
+							th:src="@{${rentArticleImage.imagePath}}"/>
+					</div>
+					<div>
+						<input type="file" name="extraImage" 
+							accept="image/png, image/jpeg" />
+					</div>
+					
+					<input type="hidden" name="imageIDs" th:id="'imageId' + ${status.index}"
+						th:value="${rentArticleImage.id}" />
+					<input type="hidden" name="imageNames" th:id="'imageName' + ${status.index}"
+						th:value="${rentArticleImage.name}" />
+					
+				</div>		
+			</th:block>
+			
+			<div class="col border m-3 p-2" th:id="'divExtraImage' + ${numberOfExistingExtraImages}">
+				<div th:id="'extraImageHeader' + ${numberOfExistingExtraImages}">
+					<label>Extra Image #[[${numberOfExistingExtraImages + 1}]]:</label>
+				</div>
+				<div class="m-2">
+					<img th:id="'extraThumbnail' + ${numberOfExistingExtraImages}" 
+						th:alt="'Extra image' + ${numberOfExistingExtraImages} + ' preview'" class="img-fluid-mobile-grosse"
+						th:src="@{/images/image-thumbnail.png}"/>
+				</div>
+				<div>
+					<input type="file" name="extraImage" 
+						accept="image/png, image/jpeg" />
+				</div>
+			</div>					
+		</div>
+	</div>	
+</body>
+</html>

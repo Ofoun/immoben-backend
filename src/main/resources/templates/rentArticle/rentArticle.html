@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments :: page_head('RentArticle- Immoben Admin', 'none')" >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script type="text/javascript"src="jquery.js"></script>
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+
+</head>
+
+
+<body>
+<div class="container-fluid" >
+	
+	<div th:replace="navigation :: menu"></div>
+	
+	<h2>Gestion des annonces de location</h2>
+	
+	<div>
+		<h4>	
+			<a th:href="@{/rentArticle/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>		
+			<a th:href="@{/rentArticle/new}">Créer une nouvelle annonce de location</a>
+		</h4>	
+						
+		<div th:if="${message != null}" class="alert alert-success text-center">
+			[[${message}]]
+		</div>
+	</div>
+
+<!-- 
+	<div th:replace="fragments :: search_form_and_message('/rentArticle/page/1')" ></div>
+	 -->
+	 		
+	<div>
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark ">
+			<form th:action="@{/rentArticle/page/1}"  class="form-inline text-white m-3" id="searchForm">
+				<input type="hidden" name="sortField" th:value="${sortField}" />
+				<input type="hidden" name="sortDir" th:value="${sortDir}" />
+				
+				<div class="full-header-details mb-2">
+					<div class="row mb-2">
+						<div class="col-3">
+							Catégorie: 
+						</div>
+						<div class="col-9">
+							<select class="form-control" name="categoryId" id="dropdownCategory">
+								<option value="0">Toutes les catégories</option>
+								
+								<th:block th:each="cat : ${listCategories}">
+								<option th:value="${cat.id}" th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
+								</th:block>
+							</select>
+						</div>					
+					</div>
+					
+					<div class="row mb-2">
+						<div class="col-3">
+							Filtre:
+						</div>
+						<div class="col-9">
+							<input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
+						</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col-4">
+							<button type="submit" class="btn btn-primary">
+								Chercher
+							</button>
+						</div>
+						<div class="col-4">
+							<button type="button" class="btn btn-danger" onclick="clearFilter()">
+								Annuler
+							</button>
+						</div>
+					</div>
+				</div>
+			
+				<div class= "less-header-details mb-2">
+					Catégorie:&nbsp;
+					<select class="form-control" name="categoryId" id="dropdownCategory">
+						<option value="0">Toutes les catégories</option>
+						
+						<th:block th:each="cat : ${listCategories}">
+						<option th:value="${cat.id}" th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
+						</th:block>
+					</select>
+					
+					&nbsp;Filtre:&nbsp;
+					<input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
+					&nbsp;&nbsp;
+					<button type="submit" class="btn btn-primary">
+						Chercher
+					</button>
+					&nbsp;&nbsp;
+					<button type="button" class="btn btn-danger" onclick="clearFilter()">
+						Annuler
+					</button>
+				</div>
+			</form>
+		</nav>		
+	</div>	
+		
+	
+	<div class="full-details mb-5">
+		<table class="table table-bordered table-striped table-hover table-responsive-xl">
+			<thead class="thead-dark">
+				<tr>
+					<th style="max-width: 10px;">ID</th>
+					<th>Image</th>
+					<th style="max-width: 50px;">Date</th>
+					<th>Ville</th>
+					<th style="max-width: 50px;">Catégorie</th>
+					<th>Quartier</th>
+					<th>Salon</th>
+					<th>Chambre</th>
+					<th>Cuisine</th>
+					<th>Douche</th>
+					<th>Toilette</th>
+					<th>Superficie</th>
+					<th>Loyer</th>
+					<th>Téléphone</th>
+					<th style="max-width: 50px;">Propriétaire</th>
+					<th style="max-width: 75px;">Message</th>
+					<th></th>
+				</tr>								
+			</thead>
+			
+			<tbody>
+				<tr th:each="rentArticle : ${listRentArticle}">
+					<td class="col-1">[[${rentArticle.id}]]</td>
+					<td class="col-1">
+						<img th:src="@{${rentArticle.mainImagePath}}" class="img-fluid"/>
+					</td>
+					<td class="col-1">[[${rentArticle.createdTime}]]</td>
+					<td class="col-1">[[${rentArticle.city}]]</td>
+					<td class="col-1">[[${rentArticle.immoCategory}]]</td>
+					<td class="col-1">[[${rentArticle.district}]]</td>
+					<td class="col-1">[[${rentArticle.lounge}]]</td>
+					<td class="col-1">[[${rentArticle.room}]]</td>
+					<td class="col-1">[[${rentArticle.kitchen}]]</td>
+					<td class="col-1">[[${rentArticle.shower}]]</td>
+					<td class="col-1">[[${rentArticle.toilet}]]</td>
+					<td class="col-1">[[${rentArticle.area}]]</td>
+					<td class="col-1">[[${rentArticle.price}]]</td>
+					<td class="col-1">[[${rentArticle.phoneNumber}]]</td>
+					<td class="col-1">[[${rentArticle.landlord}]]</td>
+					<td class="col-1">[[${rentArticle.message}]]</td>
+
+					<td class="col-1 text-center p-2" style="white-space: nowrap">
+						
+						<a class="fas fa-file-alt fa-2x icon-blue link-detail"
+							th:href="@{'/rentArticle/detail/' + ${rentArticle.id}}"
+							title="Voir les détails du compte"
+							></a>
+						&nbsp;
+						<div th:replace="fragments :: status(${rentArticle.enabled}, 'rentArticle', '/rentArticle/' + ${rentArticle.id})" ></div>
+						&nbsp;
+						<div th:replace="fragments :: edit('rentArticle', '/rentArticle/edit/' + ${rentArticle.id})" ></div>
+						&nbsp; 
+						<div th:replace="fragments :: delete('rentArticle', ${rentArticle.id}, '/rentArticle/delete/' + ${rentArticle.id}, true)" ></div>						
+					</td>					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+					
+
+	
+<!-- 	
+	<div class="top_pagination"></div>
+	
+	<div th:replace="fragments :: pagination('marque')"></div> -->
+	
+	<div th:replace="modal_fragments :: confirm_modal"  ></div>
+	
+	<div th:replace="fragments :: footer"></div>
+	
+</div>
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+	moduleURL = "[[@{/rentArticle}]]";
+
+	$(document).ready(function() {
+		$(".link-delete").on("click", function(e) {
+			e.preventDefault();
+			showDeleteConfirmModal($(this), 'rentArticle');
+		});
+		
+		$(".link-detail").on("click", function(e) {
+			e.preventDefault();
+			linkDetailURL = $(this).attr("href");
+			$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+		});
+		
+		$("#dropdownCategory").on("change", function() {
+			$("#searchForm").submit();
+		});
+	});
+</script>
+</body>
+</html>

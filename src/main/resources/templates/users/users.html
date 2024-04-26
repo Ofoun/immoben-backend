@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Utilisateurs - Immoben Admin', 'none')" >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+<div class="container-fluid">
+	<div th:replace="navigation :: menu"></div>
+	
+	<h2>Gestion des Utilisateurs</h2>
+		<div>
+			<h4>
+				
+				<a th:href="@{/users/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2" title="Exporter en données CSV"></a>
+				
+				<a th:href="@{/users/export/excel}" class="fas fa-file-excel fa-2x icon-dark mr-2" title="Exporter en données Excel"></a>		
+				
+				<a th:href="@{/users/export/pdf}" class="fas fa-file-pdf fa-2x icon-dark" title="Exporter en données PDF"></a>	
+				
+				<a th:href="@{/users/new}" class="mr-2">Créer un nouvel utilisateur</a>	
+			
+			</h4>	
+		</div>
+
+
+	
+		<div th:replace="fragments :: search_form_and_message" ></div>
+		
+		
+		
+		
+	<div class="full-details mb-5">
+		<table class="table table-bordered table-striped table-hover table-responsive-xl">
+			<thead class="thead-dark">
+				<tr>
+					<th class="hideable-column">
+						<div th:replace="fragments :: column_link('id', 'User ID', 'tag')" ></div>
+					</th>
+					
+					<th>Photos</th>
+									
+					<th class="hideable-column">
+						<div th:replace="fragments :: column_link('email', 'E-mail', 'tag')" ></div>
+					</th>
+					
+					<th th:replace="fragments :: column_link('firstName', 'Prénom', 'none')" />
+					<th th:replace="fragments :: column_link('lastName', 'Nom de famille', 'none')" />				
+					<th class="hideable-column">Roles</th>
+					<th th:replace="fragments :: column_link('enabled', 'Status', 'none')" />		
+					<th style="min-width: 70px;"></th>
+				</tr>								
+			</thead>
+			
+			<tbody>
+				<tr th:each="user : ${listUsers}">
+					<td class="col-1 hideable-column">[[${user.id}]]</td>
+					<td class="col-1">
+						<div th:replace="fragments :: user_photos" ></div>
+					</td>
+					<td class="col-2 hideable-column">[[${user.email}]]</td>
+					<td class="col-2">[[${user.firstName}]]</td>
+					<td class="col-1">[[${user.lastName}]]</td>
+					<td class="col-3 hideable-column" >[[${user.roles}]]</td>					
+					<td class="col-1 text-center">
+						<div th:replace="fragments :: status(${user.enabled}, 'utilisateur', '/users/' + ${user.id})" ></div>
+					</td>					
+					<td class="col-1 text-center p-2" style="white-space: nowrap">
+						<div th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" ></div>&nbsp;&nbsp;
+						<div th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" ></div>
+					</td>
+
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	
+	<div class= "less-details mb-5">
+		<div th:each="user : ${listUsers}" class="row m-1 table-bordered" >
+			<div class="col-3 p-1">	
+				<span th:if="${user.photos == null}" class="fas fa-portrait fa-4x icon-silver "></span>
+				<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" class="img-fluid-mobile" />	
+			</div>
+			<div class="col-7 m-1">
+                <div><b>ID: </b>[[${user.id}]]</div>
+				<div><b>Nom: </b>[[${user.fullName}]]</div>
+				<div><b>Role: </b>[[${user.roles}]]</div>
+			</div>
+			<div class="col-1 text-right p-2">	
+				<div th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" ></div>&nbsp;
+				<div th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" ></div>
+			</div>
+		</div>
+	</div>
+	
+		
+		<div class="top_pagination"></div>
+	
+		<div th:replace="fragments :: pagination('utilisateurs')" ></div>
+	
+ 		
+		<div th:replace=" modal_fragments :: modal_dialog"></div>
+		
+		<div th:replace="fragments :: footer"></div>
+		
+		
+</div>
+	
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+	moduleURL = "[[@{/users}]]";
+
+	jQuery(document).ready(function() {
+		$(".link-delete").on("click", function(e) {
+			e.preventDefault();
+			showDeleteConfirmModal($(this), 'user');
+		});
+	});
+</script>
+
+
+</body>
+</html>
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
