@@ -3,7 +3,7 @@
 #ENTRYPOINT ["java","-jar","/immoben-backend.jar"]
 
 FROM openjdk:11
-ADD target/*.jar immoben-backend.jar
+ADD target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/immoben-backend.jar"]
 
 
