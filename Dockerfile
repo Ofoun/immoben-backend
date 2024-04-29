@@ -1,5 +1,9 @@
+#FROM openjdk:11
+#ADD target/immoben-backend.jar immoben-backend.jar
+#ENTRYPOINT ["java","-jar","/immoben-backend.jar"]
+
 FROM openjdk:11
-ADD target/immoben-backend.jar immoben-backend.jar
+ADD target/*.jar immoben-backend.jar
 ENTRYPOINT ["java","-jar","/immoben-backend.jar"]
 
 
